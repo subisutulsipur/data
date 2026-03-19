@@ -593,7 +593,7 @@
         if (!response.ok) throw new Error('Failed to load data.json');
         const json = await response.json();
         data = cloneData(json);
-        setDataSourceLabel('Loaded from data.json');
+        setDataSourceLabel('Admin');
       } catch (error) {
         console.warn('Using fallback data:', error);
         data = cloneData(FALLBACK_DATA);
