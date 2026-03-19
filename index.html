@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subisu Router & DTV Management</title>
+  <link rel="icon" href="assets/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon.png">
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --subisu-blue: #1d56a8;
+      --subisu-red: #ff0f1f;
+      --subisu-purple: #6a3f98;
+      --bg: #f5f7fb;
+      --text: #17324d;
+      --muted: #6b7280;
+      --white: #ffffff;
+      --border: #e5e7eb;
+      --shadow: 0 12px 28px rgba(29, 86, 168, 0.12);
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, rgba(106,63,152,0.07), rgba(255,15,31,0.04)), var(--bg);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 1450px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--subisu-purple) 0%, var(--subisu-blue) 45%, var(--subisu-red) 100%);
+      border-radius: 22px;
+      padding: 34px 28px;
+      margin-bottom: 24px;
+      color: white;
+      box-shadow: 0 18px 40px rgba(43,45,120,0.22);
+      min-height: 200px;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      left: -60px;
+      top: 0;
+      width: 58%;
+      height: 100%;
+      background: rgba(255,255,255,0.96);
+      clip-path: polygon(0 0, 78% 0, 100% 50%, 78% 100%, 0 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 720px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .logo {
+      width: 150px;
+      max-width: 100%;
+      background: white;
+      padding: 6px 12px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+
+    .brand {
+      font-size: 42px;
+      font-weight: 800;
+      color: var(--subisu-blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      line-height: 1;
+    }
+
+    .hero h1 {
+      margin: 4px 0 0;
+      color: var(--subisu-blue);
+      font-size: 32px;
+    }
+
+    .hero p {
+      margin: 0;
+      color: #35506f;
+      font-size: 15px;
+      max-width: 580px;
+    }
+
+    .top-actions {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 3;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .admin-toggle,
+    .top-btn,
+    .source-badge {
+      border: none;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.18);
+      color: white;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .admin-toggle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .top-btn {
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .source-badge {
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: default;
+    }
+
+    .admin-toggle:hover,
+    .top-btn:hover { opacity: 0.95; transform: translateY(-1px); }
+
+    .note {
+      background: var(--white);
+      border-left: 4px solid var(--subisu-red);
+      padding: 16px 18px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      line-height: 1.5;
+    }
+
+    .note strong { color: var(--subisu-blue); }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .summary-card {
+      background: var(--white);
+      padding: 18px;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      border-top: 4px solid var(--subisu-blue);
+    }
+
+    .summary-card:nth-child(2n) { border-top-color: var(--subisu-red); }
+    .summary-card:nth-child(3n) { border-top-color: var(--subisu-purple); }
+
+    .summary-card h3 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .summary-card .count {
+      font-size: 30px;
+      font-weight: bold;
+      color: var(--text);
+    }
+
+    .form-box {
+      background: var(--white);
+      padding: 20px;
+      border-radius: 18px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .form-box h3 {
+      margin-top: 0;
+      color: var(--subisu-blue);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .form-box input,
+    .form-box select,
+    .form-box button,
+    .modal input,
+    .modal button {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: 1px solid #d6dce5;
+      font-size: 14px;
+    }
+
+    .form-box input:focus,
+    .form-box select:focus,
+    .modal input:focus {
+      outline: none;
+      border-color: var(--subisu-blue);
+      box-shadow: 0 0 0 3px rgba(29,86,168,0.12);
+    }
+
+    .save-btn,
+    .login-btn {
+      border: none;
+      background: linear-gradient(135deg, var(--subisu-blue), var(--subisu-purple));
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .sections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 22px;
+    }
+
+    .section {
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .section-header {
+      padding: 16px 18px;
+      background: linear-gradient(135deg, var(--subisu-blue), var(--subisu-purple));
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .section-header small {
+      opacity: 0.9;
+      font-size: 12px;
+    }
+
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #edf1f5;
+      text-align: left;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    th {
+      background: #f7faff;
+      color: #32506d;
+    }
+
+    tr:hover td { background: #fbfdff; }
+
+    .status {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+
+    .status.install {
+      background: rgba(29,86,168,0.12);
+      color: var(--subisu-blue);
+    }
+
+    .status.office {
+      background: rgba(255,15,31,0.10);
+      color: #c1121f;
+    }
+
+    .action-btn {
+      padding: 6px 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      margin-right: 6px;
+      font-weight: bold;
+    }
+
+    .edit-btn {
+      background: #ffe082;
+      color: #6b4e00;
+    }
+
+    .delete-btn {
+      background: #ffccd2;
+      color: #a31621;
+    }
+
+    .empty-note {
+      text-align: center;
+      color: var(--muted);
+      padding: 18px;
+      font-size: 13px;
+    }
+
+    .hidden { display: none !important; }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(23,50,77,0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 16px;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 420px;
+      background: var(--white);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 20px 60px rgba(29,86,168,0.18);
+      border-top: 5px solid var(--subisu-red);
+    }
+
+    .modal h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: var(--subisu-blue);
+    }
+
+    .modal p {
+      margin-top: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .cancel-btn {
+      background: #edf2f7;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .error-text {
+      color: #dc2626;
+      font-size: 13px;
+      min-height: 18px;
+    }
+
+    @media (max-width: 700px) {
+      .container { padding: 14px; }
+      .hero { padding: 90px 18px 24px; min-height: auto; }
+      .hero::before { width: 88%; }
+      .brand { font-size: 32px; }
+      .hero h1 { font-size: 22px; }
+      th, td { font-size: 12px; padding: 8px; }
+      .admin-toggle { width: 42px; height: 42px; }
+      .top-actions { top: 14px; right: 14px; }
+      .logo { width: 120px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="hero">
+      <div class="top-actions">
+        <span class="source-badge" id="dataSourceBadge">Loading data...</span>
+        <button class="admin-toggle" onclick="openAdminLogin()" title="Admin Access">⚙</button>
+        <button class="top-btn hidden" id="resetBtn" onclick="resetToJsonData()">Reset Data</button>
+        <button class="top-btn hidden" id="exportBtn" onclick="exportJson()">Export Data</Data></button>
+        <button class="top-btn hidden" id="logoutBtn" onclick="logoutAdmin()">Logout</button>
+      </div>
+      <div class="hero-content">
+        <!-- <img src="assets/images/logo.png" alt="Subisu Logo" class="logo"> -->
+        <div class="brand">SUBISU</div>
+        <h1>Router & DTV Management System</h1>
+        <p>Branch-wise router and DTV inventory profile</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>SUBISU TULSIPUR BRANCH ( NEW SIDDHI BINAYAK SUPPLIERS )</strong><br>
+    </div>
+
+    <div class="summary-grid">
+      <div class="summary-card"><h3>Bijauri 2G Install</h3><div class="count" id="bijauri-install-count">0</div></div>
+      <div class="summary-card"><h3>Bijauri 2G Office</h3><div class="count" id="bijauri-office-count">0</div></div>
+      <div class="summary-card"><h3>Tulsipur 2G Install</h3><div class="count" id="tulsipur2g-install-count">0</div></div>
+      <div class="summary-card"><h3>Tulsipur 2G Office</h3><div class="count" id="tulsipur2g-office-count">0</div></div>
+      <div class="summary-card"><h3>Tulsipur 5G Install</h3><div class="count" id="tulsipur5g-install-count">0</div></div>
+      <div class="summary-card"><h3>Tulsipur 5G Office</h3><div class="count" id="tulsipur5g-office-count">0</div></div>
+      <div class="summary-card"><h3>DTV Remote Install</h3><div class="count" id="dtv-install-count">0</div></div>
+      <div class="summary-card"><h3>DTV Remote Office</h3><div class="count" id="dtv-office-count">0</div></div>
+    </div>
+
+    <div class="form-box hidden" id="adminFormBox">
+      <h3 id="form-title">Add New Item</h3>
+      <div class="form-row">
+        <input type="text" id="user" placeholder="User Name">
+        <input type="text" id="serial" placeholder="Serial Number / Invoice Number">
+        <select id="branch">
+          <option value="bijauri">Bijauri 2G</option>
+          <option value="tulsipur2g">Tulsipur 2G</option>
+          <option value="tulsipur5g">Tulsipur 5G</option>
+          <option value="dtv">DTV Remote</option>
+        </select>
+        <select id="status">
+          <option value="install">Install</option>
+          <option value="office">Office</option>
+        </select>
+        <button class="save-btn" id="saveBtn" onclick="saveItem()">Add Item</button>
+      </div>
+    </div>
+
+    <div class="sections-grid">
+      <div class="section">
+        <div class="section-header"><span>Bijauri Branch (2G Router)</span><small>Install / Office auto updated</small></div>
+        <div class="table-wrap">
+          <table id="bijauriTable">
+            <thead><tr><th>User</th><th>Serial Number</th><th>Status</th><th id="actionHeader1">Action</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><span>Tulsipur Branch (2G Router)</span><small>Install / Office auto updated</small></div>
+        <div class="table-wrap">
+          <table id="tulsipur2gTable">
+            <thead><tr><th>User</th><th>Serial Number</th><th>Status</th><th id="actionHeader2">Action</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><span>Tulsipur Branch (5G Router)</span><small>Install / Office auto updated</small></div>
+        <div class="table-wrap">
+          <table id="tulsipur5gTable">
+            <thead><tr><th>User</th><th>Serial Number</th><th>Status</th><th id="actionHeader3">Action</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><span>DTV Remote</span><small>Install / Office auto updated</small></div>
+        <div class="table-wrap">
+          <table id="dtvTable">
+            <thead><tr><th>User</th><th>Invoice Number</th><th>Status</th><th id="actionHeader4">Action</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay hidden" id="loginOverlay">
+    <div class="modal">
+      <h3>Admin Login</h3>
+      <p>Enter password to enable add, edit and delete access.</p>
+      <input type="password" id="adminPassword" placeholder="Enter password">
+      <div class="error-text" id="loginError"></div>
+      <div class="modal-actions">
+        <button class="cancel-btn" onclick="closeAdminLogin()">Cancel</button>
+        <button class="login-btn" onclick="loginAdmin()">Login</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ADMIN_PASSWORD = 'subisu';
+    const DATA_FILE = './data.json';
+    const LOCAL_DATA_KEY = 'subisuRouterLiveData';
+    const ADMIN_STATE_KEY = 'subisuRouterAdmin';
+
+    const FALLBACK_DATA = {
+      bijauri: [
+        { user: 'gitadevi_tulsipur', serial: 'ALCLFC413782', status: 'install' },
+        { user: 'rastik_tulsipur', serial: 'ALCLFC414568', status: 'install' },
+        { user: 'deepti_tulsipur', serial: 'ALCLFC4116A1', status: 'install' },
+        { user: 'rekishan_ftth', serial: 'ALCLFC412CF9', status: 'install' },
+        { user: 'laxmic_bijauri', serial: 'ALCLFBF8267A', status: 'install' },
+        { user: 'kalpanagc_bijauri', serial: 'ALCLFC40F331', status: 'install' },
+        { user: 'Office', serial: '-', status: 'office' },
+        { user: 'Office', serial: '-', status: 'office' },
+        { user: 'Office', serial: '-', status: 'office' },
+        { user: 'Office', serial: '-', status: 'office' }
+      ],
+      tulsipur2g: [
+        { user: 'madhukar_tulsipur', serial: 'ALCLFC412A2B', status: 'install' },
+        { user: 'salik_butaniya', serial: 'ALCLFC06422B', status: 'install' },
+        { user: 'rudraksha_ayurveda', serial: 'ALCLFC412A69', status: 'install' },
+        { user: 'karanc_tulsipur', serial: 'ALCLFC40FD72', status: 'install' },
+        { user: 'gayatrik_tulsipur', serial: 'ALCLFC412A74', status: 'install' },
+        { user: 'komali_tulsipur', serial: 'ALCLFC064939', status: 'install' },
+        { user: 'himraj_tulsipur', serial: 'ALCLFC4128C2', status: 'install' },
+        { user: 'sitakc_tulsipur', serial: 'ALCLFC4125C7', status: 'install' },
+        { user: 'Office', serial: '-', status: 'office' },
+        { user: 'Office', serial: '-', status: 'office' }
+      ],
+      tulsipur5g: [
+        { user: 'bishowjit_tulsipur', serial: 'ALCLB2C7FCB9', status: 'install' },
+        { user: 'sanjitc_tulsipur', serial: 'ALCLB2C7FC87', status: 'install' },
+        { user: 'jamuna_Tulsipur', serial: 'ALCLB2C80254', status: 'install' },
+        { user: 'arun_tulsipur', serial: 'ALCLB2C7FC92', status: 'install' }
+      ],
+      dtv: [
+        { user: 'dinesh_tulsipur1', serial: 'CPI2082/83-0629395', status: 'install' },
+        { user: 'ghanshyam_bhandari', serial: 'CPI2082/83-0639961', status: 'install' },
+        { user: 'Office', serial: '-', status: 'office' }
+      ]
+    };
+
+    function cloneData(source) {
+      return JSON.parse(JSON.stringify(source));
+    }
+
+    let data = cloneData(FALLBACK_DATA);
+    let editInfo = { branch: null, index: null };
+    let isAdmin = JSON.parse(localStorage.getItem(ADMIN_STATE_KEY) || 'false');
+
+    function setDataSourceLabel(text) {
+      document.getElementById('dataSourceBadge').textContent = text;
+    }
+
+    function saveWorkingData() {
+      localStorage.setItem(LOCAL_DATA_KEY, JSON.stringify(data));
+    }
+
+    function clearWorkingData() {
+      localStorage.removeItem(LOCAL_DATA_KEY);
+    }
+
+    function getStoredWorkingData() {
+      try {
+        const raw = localStorage.getItem(LOCAL_DATA_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch (error) {
+        console.warn('Could not parse saved local data:', error);
+        return null;
+      }
+    }
+
+    async function loadData() {
+      const localData = getStoredWorkingData();
+      if (localData && typeof localData === 'object') {
+        data = cloneData(localData);
+        setDataSourceLabel('Admin');
+        renderAll();
+        return;
+      }
+
+      try {
+        const response = await fetch(DATA_FILE + '?v=' + Date.now(), { cache: 'no-store' });
+        if (!response.ok) throw new Error('Failed to load data.json');
+        const json = await response.json();
+        data = cloneData(json);
+        setDataSourceLabel('Loaded from data.json');
+      } catch (error) {
+        console.warn('Using fallback data:', error);
+        data = cloneData(FALLBACK_DATA);
+        setDataSourceLabel('Admin');
+      }
+      renderAll();
+      saveWorkingData();
+    }
+
+    function saveAdminState() {
+      localStorage.setItem(ADMIN_STATE_KEY, JSON.stringify(isAdmin));
+    }
+
+    function openAdminLogin() {
+      if (isAdmin) return;
+      document.getElementById('loginOverlay').classList.remove('hidden');
+      document.getElementById('adminPassword').value = '';
+      document.getElementById('loginError').innerText = '';
+      setTimeout(() => document.getElementById('adminPassword').focus(), 100);
+    }
+
+    function closeAdminLogin() {
+      document.getElementById('loginOverlay').classList.add('hidden');
+      document.getElementById('loginError').innerText = '';
+    }
+
+    function loginAdmin() {
+      const enteredPassword = document.getElementById('adminPassword').value;
+      if (enteredPassword === ADMIN_PASSWORD) {
+        isAdmin = true;
+        saveAdminState();
+        applyAccessMode();
+        closeAdminLogin();
+      } else {
+        document.getElementById('loginError').innerText = 'Incorrect password';
+      }
+    }
+
+    function logoutAdmin() {
+      isAdmin = false;
+      saveAdminState();
+      resetForm();
+      applyAccessMode();
+    }
+
+    function exportJson() {
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'data.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    async function resetToJsonData() {
+      if (!confirm('Reset all current browser-saved edits and reload from data.json?')) return;
+      clearWorkingData();
+      setDataSourceLabel('Reloading data...');
+      await loadData();
+      resetForm();
+    }
+
+    function applyAccessMode() {
+      const formBox = document.getElementById('adminFormBox');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const exportBtn = document.getElementById('exportBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const actionHeaders = ['actionHeader1', 'actionHeader2', 'actionHeader3', 'actionHeader4'];
+
+      if (isAdmin) {
+        formBox.classList.remove('hidden');
+        logoutBtn.classList.remove('hidden');
+        exportBtn.classList.remove('hidden');
+        resetBtn.classList.remove('hidden');
+        actionHeaders.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.style.display = '';
+        });
+      } else {
+        formBox.classList.add('hidden');
+        logoutBtn.classList.add('hidden');
+        exportBtn.classList.add('hidden');
+        resetBtn.classList.add('hidden');
+        actionHeaders.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.style.display = 'none';
+        });
+      }
+
+      renderAll();
+    }
+
+    function renderTable(branchKey, tableId) {
+      const tbody = document.querySelector(`#${tableId} tbody`);
+      tbody.innerHTML = '';
+
+      if (!data[branchKey] || data[branchKey].length === 0) {
+        tbody.innerHTML = `<tr><td colspan="${isAdmin ? 4 : 3}" class="empty-note">No data available</td></tr>`;
+        return;
+      }
+
+      data[branchKey].forEach((item, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.user}</td>
+          <td>${item.serial}</td>
+          <td><span class="status ${item.status}">${item.status}</span></td>
+          ${isAdmin ? `<td>
+            <button class="action-btn edit-btn" onclick="editItem('${branchKey}', ${index})">Edit</button>
+            <button class="action-btn delete-btn" onclick="deleteItem('${branchKey}', ${index})">Delete</button>
+          </td>` : ''}
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function updateCounts() {
+      const countStatus = (branch, status) => (data[branch] || []).filter(item => item.status === status).length;
+      document.getElementById('bijauri-install-count').innerText = countStatus('bijauri', 'install');
+      document.getElementById('bijauri-office-count').innerText = countStatus('bijauri', 'office');
+      document.getElementById('tulsipur2g-install-count').innerText = countStatus('tulsipur2g', 'install');
+      document.getElementById('tulsipur2g-office-count').innerText = countStatus('tulsipur2g', 'office');
+      document.getElementById('tulsipur5g-install-count').innerText = countStatus('tulsipur5g', 'install');
+      document.getElementById('tulsipur5g-office-count').innerText = countStatus('tulsipur5g', 'office');
+      document.getElementById('dtv-install-count').innerText = countStatus('dtv', 'install');
+      document.getElementById('dtv-office-count').innerText = countStatus('dtv', 'office');
+    }
+
+    function renderAll() {
+      renderTable('bijauri', 'bijauriTable');
+      renderTable('tulsipur2g', 'tulsipur2gTable');
+      renderTable('tulsipur5g', 'tulsipur5gTable');
+      renderTable('dtv', 'dtvTable');
+      updateCounts();
+      saveWorkingData();
+    }
+
+    function resetForm() {
+      document.getElementById('user').value = '';
+      document.getElementById('serial').value = '';
+      document.getElementById('branch').value = 'bijauri';
+      document.getElementById('status').value = 'install';
+      document.getElementById('form-title').innerText = 'Add New Item';
+      document.getElementById('saveBtn').innerText = 'Add Item';
+      editInfo = { branch: null, index: null };
+    }
+
+    function saveItem() {
+      if (!isAdmin) {
+        alert('Admin access required');
+        return;
+      }
+
+      const user = document.getElementById('user').value.trim();
+      const serial = document.getElementById('serial').value.trim();
+      const branch = document.getElementById('branch').value;
+      const status = document.getElementById('status').value;
+
+      if (!user || !serial) {
+        alert('Please fill all fields');
+        return;
+      }
+
+      const newItem = { user, serial, status };
+
+      if (editInfo.branch !== null && editInfo.index !== null) {
+        data[editInfo.branch][editInfo.index] = newItem;
+      } else {
+        data[branch].push(newItem);
+      }
+
+      renderAll();
+      resetForm();
+    }
+
+    function editItem(branch, index) {
+      if (!isAdmin) {
+        alert('Admin access required');
+        return;
+      }
+      const item = data[branch][index];
+      document.getElementById('user').value = item.user;
+      document.getElementById('serial').value = item.serial;
+      document.getElementById('branch').value = branch;
+      document.getElementById('status').value = item.status;
+      document.getElementById('form-title').innerText = 'Edit Item';
+      document.getElementById('saveBtn').innerText = 'Update Item';
+      editInfo = { branch, index };
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function deleteItem(branch, index) {
+      if (!isAdmin) {
+        alert('Admin access required');
+        return;
+      }
+      if (confirm('Are you sure you want to delete this item?')) {
+        data[branch].splice(index, 1);
+        renderAll();
+        resetForm();
+      }
+    }
+
+    document.getElementById('adminPassword').addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') loginAdmin();
+    });
+
+    loadData();
+    applyAccessMode();
+  </script>
+</body>
+</html>

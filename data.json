@@ -1,0 +1,37 @@
+{
+  "bijauri": [
+    { "user": "gitadevi_tulsipur", "serial": "ALCLFC413782", "status": "install" },
+    { "user": "rastik_tulsipur", "serial": "ALCLFC414568", "status": "install" },
+    { "user": "deepti_tulsipur", "serial": "ALCLFC4116A1", "status": "install" },
+    { "user": "rekishan_ftth", "serial": "ALCLFC412CF9", "status": "install" },
+    { "user": "laxmic_bijauri", "serial": "ALCLFBF8267A", "status": "install" },
+    { "user": "kalpanagc_bijauri", "serial": "ALCLFC40F331", "status": "install" },
+    { "user": "Office", "serial": "-", "status": "office" },
+    { "user": "Office", "serial": "-", "status": "office" },
+    { "user": "Office", "serial": "-", "status": "office" },
+    { "user": "Office", "serial": "-", "status": "office" }
+  ],
+  "tulsipur2g": [
+    { "user": "madhukar_tulsipur", "serial": "ALCLFC412A2B", "status": "install" },
+    { "user": "salik_butaniya", "serial": "ALCLFC06422B", "status": "install" },
+    { "user": "rudraksha_ayurveda", "serial": "ALCLFC412A69", "status": "install" },
+    { "user": "karanc_tulsipur", "serial": "ALCLFC40FD72", "status": "install" },
+    { "user": "gayatrik_tulsipur", "serial": "ALCLFC412A74", "status": "install" },
+    { "user": "komali_tulsipur", "serial": "ALCLFC064939", "status": "install" },
+    { "user": "himraj_tulsipur", "serial": "ALCLFC4128C2", "status": "install" },
+    { "user": "sitakc_tulsipur", "serial": "ALCLFC4125C7", "status": "office" },
+    { "user": "Office", "serial": "-", "status": "office" },
+    { "user": "Office", "serial": "-", "status": "office" }
+  ],
+  "tulsipur5g": [
+    { "user": "bishowjit_tulsipur", "serial": "ALCLB2C7FCB9", "status": "install" },
+    { "user": "sanjitc_tulsipur", "serial": "ALCLB2C7FC87", "status": "install" },
+    { "user": "jamuna_Tulsipur", "serial": "ALCLB2C80254", "status": "install" },
+    { "user": "arun_tulsipur", "serial": "ALCLB2C7FC92", "status": "install" }
+  ],
+  "dtv": [
+    { "user": "dinesh_tulsipur1", "serial": "CPI2082/83-0629395", "status": "install" },
+    { "user": "ghanshyam_bhandari", "serial": "CPI2082/83-0639961", "status": "install" },
+    { "user": "Office", "serial": "-", "status": "office" }
+  ]
+}
