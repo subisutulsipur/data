@@ -19,7 +19,7 @@
     { "user": "gayatrik_tulsipur", "serial": "ALCLFC412A74", "status": "install" },
     { "user": "komali_tulsipur", "serial": "ALCLFC064939", "status": "install" },
     { "user": "himraj_tulsipur", "serial": "ALCLFC4128C2", "status": "install" },
-    { "user": "sitakc_tulsipur", "serial": "ALCLFC4125C7", "status": "office" },
+    { "user": "sitakc_tulsipur", "serial": "ALCLFC4125C7", "status": "install" },
     { "user": "Office", "serial": "-", "status": "office" },
     { "user": "Office", "serial": "-", "status": "office" }
   ],
