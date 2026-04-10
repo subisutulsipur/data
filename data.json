@@ -36,9 +36,9 @@
       "status": "install"
     },
     {
-      "user": "Office",
-      "serial": "-",
-      "status": "office"
+      "user": "premo_bijauri",
+      "serial": "ALCLFC414AC7",
+      "status": "install"
     },
     {
       "user": "Office",
@@ -46,9 +46,9 @@
       "status": "office"
     },
     {
-      "user": "Office",
-      "serial": "-",
-      "status": "office"
+      "user": "sarmilach_tulsipur",
+      "serial": "ALCLFBF82A26",
+      "status": "install"
     }
   ],
   "tulsipur2g": [
@@ -98,9 +98,9 @@
       "status": "install"
     },
     {
-      "user": "Office",
-      "serial": "-",
-      "status": "office"
+      "user": "sudha_tulsipur",
+      "serial": "ALCLFC415269",
+      "status": "install"
     }
   ],
   "tulsipur5g": [
