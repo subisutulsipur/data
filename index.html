@@ -788,7 +788,13 @@
       if (editInfo.branch !== null && editInfo.index !== null) {
         data[editInfo.branch][editInfo.index] = newItem;
       } else {
-        data[branch].push(newItem);
+        // data[branch].push(newItem);
+        if (!Array.isArray(data[branch])) {
+        data[branch] = [];
+        }
+
+       data[branch] = [...data[branch], newItem];
+        
       }
 
       renderAll();
@@ -817,7 +823,8 @@
         return;
       }
       if (confirm('Are you sure you want to delete this item?')) {
-        data[branch].splice(index, 1);
+        // data[branch].splice(index, 1);
+        data[branch] = data[branch].filter((_, i) => i !== index);
         renderAll();
         resetForm();
       }
