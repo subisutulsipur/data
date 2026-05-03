@@ -98,9 +98,54 @@
       "status": "install"
     },
     {
-      "user": "sudha_tulsipur",
-      "serial": "ALCLFC415269",
+      "user": "durgak_tulsipur",
+      "serial": "ALCLFC4133DC",
       "status": "install"
+    },
+    {
+      "user": "tika_bhandari",
+      "serial": "ALCLFC41048E",
+      "status": "install"
+    },
+    {
+      "user": "office",
+      "serial": "-",
+      "status": "office"
+    },
+    {
+      "user": "office",
+      "serial": "-",
+      "status": "office"
+    },
+    {
+      "user": "office",
+      "serial": "-",
+      "status": "office"
+    },
+        {
+      "user": "office",
+      "serial": "-",
+      "status": "office"
+    },
+    {
+      "user": "office",
+      "serial": "-",
+      "status": "office"
+    },
+    {
+      "user": "office",
+      "serial": "-",
+      "status": "office"
+    },
+        {
+      "user": "office",
+      "serial": "-",
+      "status": "office"
+    },
+    {
+      "user": "office",
+      "serial": "-",
+      "status": "office"
     }
   ],
   "tulsipur5g": [
