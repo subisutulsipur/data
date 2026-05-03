@@ -122,11 +122,6 @@
       "serial": "-",
       "status": "office"
     },
-        {
-      "user": "office",
-      "serial": "-",
-      "status": "office"
-    },
     {
       "user": "office",
       "serial": "-",
@@ -137,7 +132,12 @@
       "serial": "-",
       "status": "office"
     },
-        {
+    {
+      "user": "office",
+      "serial": "-",
+      "status": "office"
+    },
+    {
       "user": "office",
       "serial": "-",
       "status": "office"
