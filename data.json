@@ -170,6 +170,23 @@
       "status": "install"
     }
   ],
+  "tulsipur6g": [
+    {
+      "user": "office",
+      "serial": "-",
+      "status": "office"
+    },
+    {
+      "user": "office",
+      "serial": "-",
+      "status": "office"
+    },
+    {
+      "user": "office",
+      "serial": "-",
+      "status": "office"
+    }
+  ],
   "dtv": [
     {
       "user": "dinesh_tulsipur1",
