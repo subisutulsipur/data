@@ -235,18 +235,37 @@
       font-weight: bold;
     }
 
-    .sections-grid {
+    /* .sections-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
       gap: 22px;
-    }
+    } */
 
+.sections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 22px;
+  align-items: start;
+}
+    
     .section {
       background: var(--white);
       border-radius: 20px;
       overflow: hidden;
       box-shadow: var(--shadow);
+      height: fit-content;
+  align-self: start;
     }
+
+    table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+    tbody tr {
+  height: auto;
+}
 
     .section-header {
       padding: 16px 18px;
